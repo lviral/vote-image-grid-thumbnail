@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>vote-image-grid-thumbnail</title>
+      
+    <script>
+        window.Polymer = {
+            dom: 'shadow'
+        }
+        
+        function getImage(url){
+            return new Promise(function(resolve, reject){
+                var img = new Image();
+                img.onload = function(){
+                    resolve(img);
+                }
+                img.onerror = function(){
+                    reject(url);
+                }
+                img.src = url;
+            })
+        }
+        
+        //var srcs = ['Jellyfish.jpg','Desert.jpg','Chrysanthemum.jpg','Tulips.jpg'],
+        var srcs = ['Jellyfish.jpg'],
+            imagesPromises = srcs.map(getImage),
+            images = [];
+        Promise.all(imagesPromises).then(function(imagesRes){
+            imagesRes.forEach(function(image){
+                images.push(image);
+            });
+            var vigt = document.getElementById('vigt');
+            vigt.images = images;
+        }).catch(function(urls){
+            console.log("Error fetching some images: " + urls)
+        });
+        
+    </script>
+
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <!--link rel="import" href="../iron-component-page/iron-component-page.html">-->
+    <link rel="import" href="vote-image-grid-thumbnail.html">
+  </head>
+  <body>
+    <!--<iron-component-page src="vote-image-grid-thumbnail.html"></iron-component-page>-->
+    <vote-image-grid-thumbnail id="vigt" width="400" height="400"></vote-image-grid-thumbnail>
+  </body>
+</html>
